@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kallus Creation - Capturing Moments</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <style>
+        /* Base Styles */
+        * {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        /* Background with multiple layers */
+        body {
+            background: linear-gradient(135deg, #ffffff, #f5f5f5, #fafafa);
+        }
+        
+        /* Intro Animation */
+        .intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease-out;
+        }
+
+        .intro-text {
+            color: white;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease-out;
+        }
+
+        .intro-text.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Welcome Dialog */
+        .welcome-dialog {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            z-index: 900;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease-out;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .welcome-dialog.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Wedding Background Images */
+        .bg-wedding-images {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .bg-wedding-images::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1611516491426-03025e6043c8'),
+                            url('https://images.unsplash.com/photo-1620999631851-88733234fa0b'),
+                            url('https://images.unsplash.com/photo-1583149577727-fed214d20327');
+            background-position: center;
+            background-size: cover;
+            opacity: 0.15;
+            animation: fadeInOut 30s infinite;
+        }
+        
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.2; }
+        }
+        
+        .neu-brutal {
+            box-shadow: 8px 8px 0px 0px #000000;
+            border: 2px solid #000000;
+            backdrop-filter: blur(8px);
+            transition: all 0.2s ease;
+        }
+        .neu-brutal:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 12px 12px 0px 0px #000000;
+        }
+        .title-font {
+            font-family: 'Playfair Display', serif;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .package-card {
+            transform: perspective(1000px) rotateX(0deg);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .package-card:hover {
+            transform: perspective(1000px) rotateX(2deg);
+        }
+        .price-tag {
+            background: linear-gradient(45deg, #967259, #483434);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body class="min-h-screen p-4 md:p-8 relative">
+    <!-- Background wedding images container -->
+    <div class="bg-wedding-images"></div>
+    
+    <!-- Main content wrapper with higher z-index -->
+    <div class="max-w-6xl mx-auto relative z-10">
+        <!-- Intro Overlay -->
+        <div class="intro-overlay">
+            <div class="intro-text text-center">
+                <h1 class="text-6xl md:text-8xl title-font mb-4">Kallus Creation</h1>
+                <p class="text-xl md:text-2xl">Where Moments Become Memories</p>
+            </div>
+        </div>
+
+        <!-- Welcome Dialog -->
+        <div class="welcome-dialog neu-brutal">
+            <h2 class="text-2xl font-bold mb-4 title-font">Welcome to Kallus Creation</h2>
+            <p class="mb-6">We specialize in capturing life's most precious moments. Our packages are designed to ensure every special moment is preserved forever.</p>
+            <div class="flex justify-between items-center">
+                <button onclick="skipIntro()" class="text-gray-500 underline">Skip Intro</button>
+                <button onclick="showPackages()" class="neu-brutal bg-black text-white px-6 py-2 rounded-lg">
+                    View Our Packages
+                    <i class="bi bi-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <header class="text-center mb-16" data-aos="fade-down">
+            <h1 class="text-5xl md:text-7xl font-bold mb-4 text-black title-font">
+                Kallus Creation
+            </h1>
+            <p class="text-xl md:text-2xl text-black italic">Creating Timeless Memories</p>
+            <div class="w-24 h-1 bg-black mx-auto mt-6"></div>
+        </header>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Basic Package -->
+            <div class="package-card glass-card p-8 neu-brutal rounded-lg" data-aos="fade-up" data-aos-delay="100">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold">Reception Package</h2>
+                    <i class="bi bi-camera text-2xl"></i>
+                </div>
+                <div class="text-lg mb-4">
+                    <p class="font-bold text-4xl mb-4 price-tag">₹75,000</p>
+                    <ul class="space-y-2">
+                        <li>Professional Reception Coverage</li>
+                        <li>40 Sheet Photo Album</li>
+                        <li>Full Video Coverage</li>
+                        <li>Basic Color Correction</li>
+                        <li>Digital Files Delivery</li>
+                    </ul>
+                </div>
+                <button class="neu-brutal bg-black text-white px-6 py-3 rounded-lg w-full hover:bg-gray-800 transition-colors" onclick="contactUs()">
+                    <i class="bi bi-calendar-check me-2"></i>Book Now
+                </button>
+            </div>
+
+            <!-- Standard Package -->
+            <div class="package-card glass-card p-8 neu-brutal rounded-lg" data-aos="fade-up" data-aos-delay="200">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold">Premium Package</h2>
+                    <i class="bi bi-camera2 text-2xl"></i>
+                </div>
+                <div class="text-lg mb-4">
+                    <p class="font-bold text-4xl mb-4 price-tag">₹90,000</p>
+                    <ul class="space-y-2">
+                        <li>Extended Video Coverage</li>
+                        <li>50 Sheet Premium Album</li>
+                        <li>Advanced Color Grading</li>
+                        <li>Highlight Reel</li>
+                        <li>Same-Day Edit</li>
+                        <li>Digital Files in High Resolution</li>
+                    </ul>
+                </div>
+                <button class="neu-brutal bg-black text-white px-6 py-3 rounded-lg w-full hover:bg-gray-800 transition-colors" onclick="contactUs()">
+                    <i class="bi bi-calendar-check me-2"></i>Book Now
+                </button>
+            </div>
+
+            <!-- Premium Package -->
+            <div class="package-card glass-card p-8 neu-brutal rounded-lg" data-aos="fade-up" data-aos-delay="300">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold">Ultra Premium</h2>
+                    <i class="bi bi-camera-reels text-2xl"></i>
+                </div>
+                <div class="text-lg mb-4">
+                    <p class="font-bold text-4xl mb-4 price-tag">₹1,10,000</p>
+                    <ul class="space-y-2">
+                        <li>Special Ultra-Candid Coverage</li>
+                        <li>60+ HD 12-bit Digital Album</li>
+                        <li>Cinematic Video Production</li>
+                        <li>Drone Shots</li>
+                        <li>Professional Color Grading</li>
+                        <li>4K Video Resolution</li>
+                        <li>Behind-the-Scenes Coverage</li>
+                        <li>Premium USB Delivery</li>
+                    </ul>
+                </div>
+                <button class="neu-brutal bg-black text-white px-6 py-3 rounded-lg w-full hover:bg-gray-800 transition-colors" onclick="contactUs()">
+                    <i class="bi bi-calendar-check me-2"></i>Book Now
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center p-4 z-50">
+        <div class="bg-white p-6 rounded-lg neu-brutal max-w-md w-full">
+            <h2 class="text-2xl font-bold mb-4">Contact Us</h2>
+            <form id="contactForm" class="space-y-4">
+                <div>
+                    <label class="block mb-2">Name</label>
+                    <input type="text" class="w-full p-2 neu-brutal" required>
+                </div>
+                <div>
+                    <label class="block mb-2">Phone</label>
+                    <input type="tel" class="w-full p-2 neu-brutal" required>
+                </div>
+                <div>
+                    <label class="block mb-2">Event Date</label>
+                    <input type="date" class="w-full p-2 neu-brutal" required>
+                </div>
+                <div>
+                    <label class="block mb-2">Package</label>
+                    <select class="w-full p-2 neu-brutal" required>
+                        <option>Reception Package - ₹75,000</option>
+                        <option>Premium Package - ₹90,000</option>
+                        <option>Ultra Premium Package - ₹1,10,000</option>
+                    </select>
+                </div>
+                <div class="flex justify-end gap-4">
+                    <button type="button" class="neu-brutal bg-red-500 text-white px-6 py-2 rounded" onclick="closeModal()">Close</button>
+                    <button type="submit" class="neu-brutal bg-black text-white px-6 py-2 rounded">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+
+    <script>
+        // Initial content state
+        document.querySelector('.max-w-6xl').style.opacity = '1';
+        
+        // Intro animation sequence
+        window.addEventListener('load', () => {
+            const introText = document.querySelector('.intro-text');
+            const introOverlay = document.querySelector('.intro-overlay');
+            const welcomeDialog = document.querySelector('.welcome-dialog');
+            const mainContent = document.querySelector('.max-w-6xl');
+            
+            // Timeline for intro animation
+            const tl = gsap.timeline();
+            
+            // Show intro text
+            setTimeout(() => {
+                introText.classList.add('active');
+            }, 500);
+
+            // Fade out intro overlay
+            setTimeout(() => {
+                introOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    introOverlay.style.display = 'none';
+                    welcomeDialog.classList.add('active');
+                }, 1000);
+            }, 1500);
+        });
+        
+        // Skip intro function
+        function skipIntro() {
+            const introOverlay = document.querySelector('.intro-overlay');
+            const welcomeDialog = document.querySelector('.welcome-dialog');
+            const mainContent = document.querySelector('.max-w-6xl');
+            
+            introOverlay.style.display = 'none';
+            introOverlay.style.opacity = '0';
+            welcomeDialog.classList.remove('active');
+            mainContent.style.opacity = '1';
+            mainContent.style.transform = 'translateY(0)';
+        }
+        
+        // Show packages function
+        function showPackages() {
+            const welcomeDialog = document.querySelector('.welcome-dialog');
+            const mainContent = document.querySelector('.max-w-6xl');
+            
+            welcomeDialog.classList.remove('active');
+            mainContent.style.opacity = '1';
+            mainContent.style.transform = 'translateY(0)';
+            
+            // Trigger AOS animations
+            AOS.refresh();
+        }
+        
+        function contactUs() {
+            document.getElementById('contactModal').classList.remove('hidden');
+            document.getElementById('contactModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('contactModal').classList.add('hidden');
+        }
+
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your interest! We will contact you soon.');
+            closeModal();
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('contactModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            disable: window.innerWidth < 768
+        });
+    </script>
+<script>document.body.addEventListener('wheel', e => { if (!e.ctrlKey) return; e.preventDefault(); return }, { passive: false })</script>
+	</body>
+</html>
